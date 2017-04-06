@@ -12,7 +12,7 @@
 name=ADMS-Urban
 qgisMinimumVersion=2.2
 description=QGis plugin to visualize data and sources of an ADMS-Urban `.upl` file.
-version=0.1
+version=0.2
 author=Jonathan VIRGA
 email=jonathan.virga@gmail.com
 
