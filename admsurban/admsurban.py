@@ -24,11 +24,7 @@ from shapely.geometry import Point, Polygon, LineString
 
 def listfromstr(s):
     """Return list of elements from "'xxx' 'xxx' 'xxx'" string."""
-    l = s.strip().split("'")
-    if len(l) % 2 != 1:
-        return None  # cannot find elements...
-    else:
-        return l[1:-1:2]
+    return s.strip().replace("'", "").replace('"', '').split()
 
 
 class ADMSUrbanSource:
@@ -102,15 +98,16 @@ class ADMSUrbanUPL:
         for src_block in src_blocks:
             
             # Source name
-            srcnam_re = re.compile(r"SrcName\s+=\s+'(.*)'")
-            srcnam = re.findall(srcnam_re, src_block)[0]
+            srcnam_re = re.compile(r"""SrcName\s+=\s+["'](.*)["']""")
+            srcnam = re.findall(srcnam_re, src_block)[0].strip()
             
             # Source type
             srctyp_re = re.compile(r'SrcSourceType\s+=\s+(.*)\s')
             srctyp = int(re.findall(srctyp_re, src_block)[0])
             
             # List of pollutants
-            srcpol_re = re.compile(r"SrcPollutants\s+=\s+('.*')\s", re.DOTALL)
+            srcpol_re = re.compile(r"""SrcPollutants\s+=\s+(["'].*["'])\s""",
+                                   re.DOTALL)
             srcpol = [e.strip()
                       for e in listfromstr(re.findall(srcpol_re, src_block)[0])]
             
